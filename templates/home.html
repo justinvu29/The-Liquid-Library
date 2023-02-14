@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/home.css">
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300&family=Nunito+Sans:ital,wght@1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cocktail-card">
+        <h2>{{ cocktail['strDrink'] }}</h2>
+        <img src="{{ cocktail['strDrinkThumb'] }}" alt="Image of {{ cocktail['strDrink'] }}">
+        <div class="card-info">
+          <h4>Contains Alcohol: {% if cocktail['strAlcoholic'] == 'Alcoholic' %}Yes{% else %}No{% endif %}</h4>
+          <h4>Instructions</h4>
+            <p>{{ cocktail['strInstructions'] }}</p>
+          <h4>Ingredients</h4>
+          <ul>
+            {% for i in range(1, 16) %}
+              {% set ingredient = cocktail['strIngredient' + i|string] %}
+              {% set measure = cocktail['strMeasure' + i|string] %}
+              {% if ingredient %}
+                <li>{% if measure and measure != 'None' %}{{ measure }} {% endif %}{{ ingredient }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+</body>
+</html>
