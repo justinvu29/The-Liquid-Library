@@ -3,6 +3,7 @@ from flask import Flask, render_template, request
 import jinja2
 import requests
 import random
+from model import connect_to_db, db, Cocktail, Favorite
 
 
 app = Flask(__name__)
@@ -25,6 +26,23 @@ def homepage():
         return render_template('home.html', cocktail=cocktail)
     else:
         return render_template('search.html')
+
+@app.route('/add_to_favorites', methods=['POST'])
+def add_to_favorites():
+    cocktail_id = request.form['cocktail_id']
+    user_id = request.form['user_id']
+    favorite = Favorite(cocktail_id=cocktail_id, user_id=user_id)
+    db.session.add(favorite)
+    db.session.commit()
+    return 'Added to favorites!'
+
+@app.route('/favorites')
+def favorites():
+    user_id = request.args.get('user_id')
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    cocktail_ids = [favorite.cocktail_id for favorite in favorites]
+    cocktails = Cocktail.query.filter(Cocktail.id.in_(cocktail_ids)).all()
+    return render_template('favorites.html', cocktails=cocktails)
 
 
 if __name__ == "__main__":

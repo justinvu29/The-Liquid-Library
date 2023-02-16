@@ -9,9 +9,17 @@
     <title>Liquid Library</title>
 </head>
 <body>
-    <form method="get">
-        <button type="submit" name="Random" value="True">Get Random Cocktail</button>
-    </form>
+    <nav>
+        <div class="nav-bar">
+            <a href="/">
+                <img src="/static/liquid-library-logo2.png" id="logo">            
+            </a>
+            <form action="/" method="get">
+                <input type="text" placeholder="Find New Cocktail..." name="search">
+                <input type="submit" name="GO" id="top-submit">
+            </form>
+        </div>
+    </nav>
 
     <div class="cocktail-card">
         <h2>{{ cocktail['strDrink'] }}</h2>
@@ -30,6 +38,19 @@
               {% endif %}
             {% endfor %}
           </ul>
+        
+        <div class="button-container">
+
+            <form action="/add_favorite" method="POST">
+                <input type="hidden" name="cocktail_id" value="{{ cocktail.id }}">
+                <button type="submit">Add to Favorites</button>
+            </form>
+
+            <form method="get">
+                <button type="submit" name="Random" value="True">Get Random Cocktail</button>
+            </form>
+        </div>
+
         </div>
       </div>
 </body>

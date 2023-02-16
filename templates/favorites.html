@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>My Favorites</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Cocktail Name</th>
+        <th>Instructions</th>
+        <th>Ingredients</th>
+        <th>Alcoholic</th>
+        <th>Image URL</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for favorite in favorites %}
+        <tr>
+          <td>{{ favorite.cocktail.cocktail_name }}</td>
+          <td>{{ favorite.cocktail.instructions }}</td>
+          <td>
+            <ul>
+              {% for ingredient in favorite.cocktail.ingredients %}
+                <li>{{ ingredient.ingredient_name }} - {{ ingredient.measurement }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+          <td>{{ "Yes" if favorite.cocktail.alcoholic else "No" }}</td>
+          <td><img src="{{ favorite.cocktail.image_url }}" alt="{{ favorite.cocktail.cocktail_name }}" height="100"></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
