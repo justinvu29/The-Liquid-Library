@@ -2,6 +2,8 @@
 from flask import Flask, render_template, request
 import jinja2
 import requests
+import random
+
 
 app = Flask(__name__)
 
@@ -14,9 +16,16 @@ def homepage():
         res = requests.get(url)
         res = res.json()
         cocktail = res['drinks'][0]
-        return render_template('home.html', cocktail = cocktail)
+        return render_template('home.html', cocktail=cocktail)
+    elif 'Random' in request.args:
+        url = 'https://www.thecocktaildb.com/api/json/v1/1/random.php'
+        res = requests.get(url)
+        res = res.json()
+        cocktail = res['drinks'][0]
+        return render_template('home.html', cocktail=cocktail)
     else:
         return render_template('search.html')
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

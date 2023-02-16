@@ -26,5 +26,6 @@ input[type="submit"] {
 .logo {
     display: block;
     margin: 20px auto;
+    margin-top: 200px;
     height: 150px;
 }
