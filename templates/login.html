@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Page</title>
+  </head>
+  <body>
+    <h1>Login Page</h1>
+    {% if form.errors %}
+      <div class="alert alert-danger">
+        {% for error in form.errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+    {% endif %}
+    <form method="POST" action="{{ url_for('login') }}">
+      {{ form.csrf_token }}
+      <label for="email">Email</label>
+      {{ form.email }}
+      <br>
+      <label for="password">Password</label>
+      {{ form.password }}
+      <br>
+      <label for="remember_me">Remember me</label>
+      {{ form.remember_me }}
+      <br>
+      <input type="submit" value="Login">
+    </form>
+    <h1>Create Account</h1>
+    <form method="POST" action="{{ url_for('register') }}">
+        {{ register_form.csrf_token }}
+        <label for="email">Email</label>
+        {{ register_form.email }}
+        <br>
+        <label for="password">Password</label>
+        {{ register_form.password }}
+        <br>
+        <label for="remember_me">Remember me</label>
+        {{ register_form.remember_me }}
+        <br>
+        <input type="submit" value="Login">
+      </form>
+  </body>
+</html>

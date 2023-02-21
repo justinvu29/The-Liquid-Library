@@ -1,61 +1,40 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 
 db = SQLAlchemy()
 
 class User(db.Model):
-
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    favorites = db.relationship('Favorite', backref='user', lazy=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
 
     def __repr__(self):
-        return f"<User user_id={self.user_id} email={self.email}>"
-
-class Cocktail(db.Model):
-
-    __tablename__ = "cocktails"
-
-    id = db.Column(db.Integer, primary_key=True)
-    cocktail_name = db.Column(db.String(120), nullable=False)
-    instructions = db.Column(db.String(500), nullable=False)
-    alcoholic = db.Column(db.Boolean, nullable=False)
-    image_url = db.Column(db.String(500), nullable=False)
-    ingredients = db.relationship('Ingredient', backref='cocktail', lazy=True)
+        return f"<User id={self.id}, email={self.email}>"
 
 
-    def __repr__(self):
-        return f"<Cocktail cocktail_id={self.cocktail_id} cocktail_name={self.cocktail_name}>"
-
-
-class Ingredient(db.Model):
-
-    __tablename__ = "ingredients"
+class FavoriteCocktail(db.Model):
+    __tablename__ = "favorite_cocktails"
 
     id = db.Column(db.Integer, primary_key=True)
-    ingredient_name = db.Column(db.String(120), nullable=False)
-    measurement = db.Column(db.String(120), nullable=False)
-    cocktail_id = db.Column(db.Integer, db.ForeignKey('cocktail.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    cocktail_id = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, user_id, cocktail_id):
+        self.user_id = user_id
+        self.cocktail_id = cocktail_id
 
     def __repr__(self):
-        return f"<Ingredient ingredient_id={ingredient_id} ingredient_name={ingredient_name}>"
+        return f"<FavoriteCocktail id={self.id}, user_id={self.user_id}, cocktail_id={self.cocktail_id}>"
 
-
-class Favorite(db.Model):
-
-    __tablename__ = "favorites"
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    cocktail_id = db.Column(db.Integer, db.ForeignKey('cocktail.id'), nullable=False)
-
-
-    def __repr__(self):
-        return f"<Favorite cocktail_id={self.cocktail_id} user_id={self.user_id}>"
 
 
 def connect_to_db(flask_app, db_uri = os.environ["POSTGRES_URI"], echo=False):
@@ -66,7 +45,7 @@ def connect_to_db(flask_app, db_uri = os.environ["POSTGRES_URI"], echo=False):
     db.app = flask_app
     db.init_app(flask_app)
 
-    print("Connected to the db!")
+    print("Connected to Database...")
 
 
 if __name__ == "__main__":
