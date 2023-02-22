@@ -1,11 +1,8 @@
 """Server for liquid library app."""
 from flask import (Flask, render_template, request, flash, session, url_for, redirect)
-from datetime import timedelta
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from forms import LoginForm, RegisterForm
-import jinja2
 import requests
-import random
 from model import connect_to_db, db, User, FavoriteCocktail
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -103,7 +100,7 @@ def add_favorite():
     db.session.add(favorite)
     db.session.commit()
     flash('Cocktail added to favorites!')
-    return redirect(url_for('homepage'))
+    return redirect(request.referrer)
 
 @app.route('/favorites')
 @login_required
