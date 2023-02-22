@@ -1,33 +1,49 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/favorites.css">
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300&family=Nunito+Sans:ital,wght@1,700&display=swap" rel="stylesheet">
+    <title>Favorites</title>
+</head>
+<body>
+    <nav>
+        <div class="nav-bar">
+            <a href="/">
+                <img src="/static/liquid-library-logo2.png" id="logo">            
+            </a>
+            <a href="{{ url_for('favorites') }}" id="favorites"><h4>Favorites</h4></a>
+            <form action="/" method="get">
+                <input type="text" placeholder="Find New Cocktail..." name="search">
+                <input type="submit" name="GO" id="top-submit">
+            </form>
+        </div>
+    </nav>
 
-{% block content %}
-  <h1>My Favorites</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Cocktail Name</th>
-        <th>Instructions</th>
-        <th>Ingredients</th>
-        <th>Alcoholic</th>
-        <th>Image URL</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for favorite in favorites %}
-        <tr>
-          <td>{{ favorite.cocktail.cocktail_name }}</td>
-          <td>{{ favorite.cocktail.instructions }}</td>
-          <td>
-            <ul>
-              {% for ingredient in favorite.cocktail.ingredients %}
-                <li>{{ ingredient.ingredient_name }} - {{ ingredient.measurement }}</li>
-              {% endfor %}
-            </ul>
-          </td>
-          <td>{{ "Yes" if favorite.cocktail.alcoholic else "No" }}</td>
-          <td><img src="{{ favorite.cocktail.image_url }}" alt="{{ favorite.cocktail.cocktail_name }}" height="100"></td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endblock %}
+    <h1>My Favorite Cocktails</h1>
+    {% for cocktail in cocktails %}
+      <div class="cocktail-card">
+        <h2>{{ cocktail['strDrink'] }}</h2>
+        <img src="{{ cocktail['strDrinkThumb'] }}" alt="Image of {{ cocktail['strDrink'] }}">
+        <div class="card-info">
+          <h4>Instructions</h4>
+          <p>{{ cocktail['strInstructions'] }}</p>
+          <h4>Contains Alcohol:</h4>
+          <p>{% if cocktail['strAlcoholic'] == 'Alcoholic' %}Yes{% else %}No{% endif %}</p>
+          <h4>Ingredients</h4>
+          <ul>
+            {% for i in range(1, 16) %}
+              {% set ingredient = cocktail['strIngredient' + i|string] %}
+              {% set measure = cocktail['strMeasure' + i|string] %}
+              {% if ingredient %}
+                <li>{% if measure and measure != 'None' %}{{ measure }} {% endif %}{{ ingredient }}</li>
+              {% endif %}
+            {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+</body>
+</html>

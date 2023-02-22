@@ -4,40 +4,34 @@
     <title>Login Page</title>
   </head>
   <body>
-    <h1>Login Page</h1>
-    {% if form.errors %}
-      <div class="alert alert-danger">
-        {% for error in form.errors %}
-          {{ error }}
+    <h1>Login</h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
         {% endfor %}
-      </div>
+      </ul>
     {% endif %}
-    <form method="POST" action="{{ url_for('login') }}">
-      {{ form.csrf_token }}
-      <label for="email">Email</label>
-      {{ form.email }}
-      <br>
-      <label for="password">Password</label>
-      {{ form.password }}
-      <br>
-      <label for="remember_me">Remember me</label>
-      {{ form.remember_me }}
-      <br>
-      <input type="submit" value="Login">
-    </form>
-    <h1>Create Account</h1>
-    <form method="POST" action="{{ url_for('register') }}">
-        {{ register_form.csrf_token }}
-        <label for="email">Email</label>
-        {{ register_form.email }}
-        <br>
-        <label for="password">Password</label>
-        {{ register_form.password }}
-        <br>
-        <label for="remember_me">Remember me</label>
-        {{ register_form.remember_me }}
-        <br>
-        <input type="submit" value="Login">
-      </form>
+  {% endwith %}
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+      {{ form.email.label }}<br>
+      {{ form.email(size=32) }}<br>
+      {% for error in form.email.errors %}
+        <span style="color: red;">[{{ error }}]</span><br>
+      {% endfor %}
+    </div>
+    <div>
+      {{ form.password.label }}<br>
+      {{ form.password(size=32) }}<br>
+      {% for error in form.password.errors %}
+        <span style="color: red;">[{{ error }}]</span><br>
+      {% endfor %}
+    </div>
+    <input type="submit" value="Log In">
+  </form>
+  <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
   </body>
 </html>

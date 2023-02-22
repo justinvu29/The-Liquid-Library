@@ -19,6 +19,7 @@
                 <input type="text" placeholder="Find New Cocktail..." name="search">
                 <input type="submit" name="GO" id="top-submit">
             </form>
+            <a href="{{ url_for('logout') }}">Logout</a>
         </div>
     </nav>
 
@@ -42,9 +43,9 @@
         
         <div class="button-container">
 
-            <form action="/add_favorite" method="POST">
-                <input type="hidden" name="cocktail_id" value="{{ cocktail.id }}">
-                <button type="submit">Add to Favorites</button>
+            <form method="POST" action="{{ url_for('add_favorite') }}">
+                <input type="hidden" name="cocktail_id" value="{{ cocktail['idDrink'] }}">
+                <button type="submit">Add to favorites</button>
             </form>
 
             <form method="get">

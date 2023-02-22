@@ -7,6 +7,7 @@ import jinja2
 import requests
 import random
 from model import connect_to_db, db, User, FavoriteCocktail
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
@@ -18,63 +19,61 @@ app.config['LOGIN_VIEW'] = 'login'
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Load user by ID."""
     return User.query.get(int(user_id))
 
-"""Login Function """
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    register_form = RegisterForm()
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register a new account."""
+    form = RegisterForm()
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
-        remember_me = form.remember_me.data
 
-        print(email)
-        print(password)
-        print(remember_me)
-
+        # Check if email already exists
         user = User.query.filter_by(email=email).first()
-
         if user:
-            if user.password == password:
-                login_user(user, remember=remember_me, duration=timedelta(days=7))
-                return redirect(url_for("homepage"))
-            return "Your username or password does not match our records."  
-        else:
-            return render_template("login.html", form=form, register_form=register_form)
-    return render_template("login.html", form=form, register_form=register_form)
+            flash("Email address already exists.")
+            return redirect(url_for("register"))
 
-@app.route("/register", methods=["POST"])
-def register():
-    form = RegisterForm()
+        # Create new user
+        new_user = User(email=email, password=generate_password_hash(password))
+        db.session.add(new_user)
+        db.session.commit()
 
-    email = form.email.data
-    password = form.password.data
-    confirm_password = form.confirm_password.data
+        flash("Account created successfully.")
+        return redirect(url_for("login"))
 
-    print(email)
-    print(password)
-    print(confirm_password)
-
-    user = User.query.filter_by(email=email).first()
-
-    if user:
-        return "Username already exists."
-    if password != confirm_password:
-        return "Passwords do not match."
-    
-    new_user = User(email, password)
-    db.session.add(new_user)
-    db.session.commit()
-
-    return "hey"
+    return render_template("register.html", form=form)
 
 
-"""Logout Function"""
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Log in with existing account."""
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        # Check if user exists and password is correct
+        user = User.query.filter_by(email=email).first()
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for("homepage"))
+
+        flash("Invalid email or password.")
+        return redirect(url_for("login"))
+
+    return render_template("login.html", form=form)
+
+
 @app.route("/logout")
+@login_required
 def logout():
+    """Log out current user."""
     logout_user()
+    flash("You have been logged out.")
     return redirect(url_for("login"))
 
 @app.route('/')
@@ -96,9 +95,29 @@ def homepage():
         return render_template('search.html')
 
 
+@app.route('/add_favorite', methods=['POST'])
+def add_favorite():
+    user_id = current_user.id
+    cocktail_id = request.form['cocktail_id']
+    favorite = FavoriteCocktail(user_id=user_id, cocktail_id=cocktail_id)
+    db.session.add(favorite)
+    db.session.commit()
+    flash('Cocktail added to favorites!')
+    return redirect(url_for('homepage'))
+
 @app.route('/favorites')
+@login_required
 def favorites():
-    return "Favorites Page"
+    user_id = current_user.id
+    favorites = FavoriteCocktail.query.filter_by(user_id=user_id).all()
+    cocktail_data = []
+
+    for fav in favorites:
+        response = requests.get(f"https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i={fav.cocktail_id}")
+        data = response.json()['drinks'][0]
+        cocktail_data.append(data)
+
+    return render_template('favorites.html', cocktails=cocktail_data)
 
 
 if __name__ == "__main__":
