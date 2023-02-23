@@ -10,7 +10,7 @@ body {
     background-color: #f3f3f3;
     border-radius: 7.5px;
     text-align: center;
-    margin-top: 125px;
+    margin-top: 70px;
   }
   
   .cocktail-card:hover {
@@ -21,8 +21,8 @@ body {
     font-size: 36px;
     margin-top: 20px;
     margin-bottom: 20px;
-    padding-top: 30px;  
-}
+    padding-top: 30px;
+  }
   
   .cocktail-card img {
     width: 450px;
@@ -34,11 +34,6 @@ body {
   .card-info {
     padding: 0 16px;
     text-align: left;
-  }
-  
-  .card-info h4 {
-    margin-bottom: 10px;
-    font-size: 18px;
   }
   
   .card-info h3 {
@@ -58,15 +53,24 @@ body {
     font-size: 16px;
     margin-bottom: 10px;
   }
-
-form {
+  
+  .card-info h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  
+  .card-info p {
+    font-size: 16px;
+  }
+  
+  form {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 10vh;
-}
-
-form [type="submit"] {
+  }
+  
+  form [type="submit"] {
     padding: 10px 20px;
     background-color: #4b4b4b;
     color: white;
@@ -74,12 +78,12 @@ form [type="submit"] {
     border: none;
     cursor: pointer;
     width: 200px;
-}
-
-.button-container {
+  }
+  
+  .button-container {
     display: flex;
     justify-content: space-evenly;
-}
+  }
 
 #logo {
     width: 250px;
@@ -100,7 +104,7 @@ form [type="submit"] {
 }
 
 input[type="text"] {
-    width: 50%;
+    width: 550px;
     padding: 10px;
     font-size: 11px;
     border-radius: 3px;
@@ -117,7 +121,35 @@ input[type="text"] {
     cursor: pointer;
 }
 
-#favorites {
-    font-family: 'Catamaran', sans-serif;
+#nav-sections {
+    font-family: 'Bebas Neue';    
     color:#f3f3f3;
+    font-size: large;
+}
+
+footer {
+    position:relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #2d2d2d;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    margin-top: 50px;
+  }
+
+#logo2{
+    width: 185px;
+    height: 75px;
+    padding-bottom: 0px;
+}
+
+h6{
+    margin-top: 0px;
+}
+
+*{
+    margin: 0%;
 }

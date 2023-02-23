@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/notfound.css">
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300&family=Nunito+Sans:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>Liquid Library</title>
+</head>
+<body>
+    <nav>
+        <div class="nav-bar">
+            <a href="/">
+                <img src="/static/liquid-library-logo2.png" id="logo">            
+            </a>
+            <form action="/" method="get">
+                <input type="text" placeholder="Find New Cocktail..." name="search">
+                <input type="submit" name="GO" id="top-submit">
+            </form>
+            <a href="{{ url_for('favorites') }}" id="nav-sections"><h4>My Favorites</h4></a>
+            <a href="{{ url_for('logout') }}" id="nav-sections">Logout</a>
+        </div>
+    </nav>
+
+    <h2 class="not-found-message">Sorry, we couldn't find a drink matching your search. Please try again with a different cocktail.</h2>
+</body>
+
+</html>

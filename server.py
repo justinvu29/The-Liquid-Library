@@ -1,4 +1,3 @@
-"""Server for liquid library app."""
 from flask import (Flask, render_template, request, flash, session, url_for, redirect)
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from forms import LoginForm, RegisterForm
@@ -16,25 +15,21 @@ app.config['LOGIN_VIEW'] = 'login'
 
 @login_manager.user_loader
 def load_user(user_id):
-    """Load user by ID."""
     return User.query.get(int(user_id))
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    """Register a new account."""
     form = RegisterForm()
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
 
-        # Check if email already exists
         user = User.query.filter_by(email=email).first()
         if user:
             flash("Email address already exists.")
             return redirect(url_for("register"))
 
-        # Create new user
         new_user = User(email=email, password=generate_password_hash(password))
         db.session.add(new_user)
         db.session.commit()
@@ -47,13 +42,11 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """Log in with existing account."""
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
 
-        # Check if user exists and password is correct
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
@@ -68,7 +61,6 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
-    """Log out current user."""
     logout_user()
     flash("You have been logged out.")
     return redirect(url_for("login"))
@@ -80,6 +72,8 @@ def homepage():
         url = f'https://www.thecocktaildb.com/api/json/v1/1/search.php?s={name}'
         res = requests.get(url)
         res = res.json()
+        if not res['drinks']:
+            return render_template('notfound.html')
         cocktail = res['drinks'][0]
         return render_template('home.html', cocktail=cocktail)
     elif 'Random' in request.args:
@@ -91,8 +85,13 @@ def homepage():
     else:
         return render_template('search.html')
 
+@app.route('/notfound')
+def notfound():
+    return render_template('notfound.html')
+
 
 @app.route('/add_favorite', methods=['POST'])
+@login_required
 def add_favorite():
     user_id = current_user.id
     cocktail_id = request.form['cocktail_id']
@@ -116,6 +115,18 @@ def favorites():
 
     return render_template('favorites.html', cocktails=cocktail_data)
 
+@app.route('/delete_favorite', methods=['POST'])
+def delete_favorite():
+    user_id = current_user.id
+    cocktail_id = request.form['cocktail_id']
+    favorite = FavoriteCocktail.query.filter_by(user_id=user_id, cocktail_id=cocktail_id).first()
+    if favorite:
+        db.session.delete(favorite)
+        db.session.commit()
+        flash('Cocktail removed from favorites!')
+    else:
+        flash('Cocktail not found in favorites!')
+    return redirect(url_for('favorites'))
 
 if __name__ == "__main__":
     connect_to_db(app)

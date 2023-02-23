@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/favorites.css">
     <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300&family=Nunito+Sans:ital,wght@1,700&display=swap" rel="stylesheet">
-    <title>Favorites</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>My Favorites</title>
 </head>
 <body>
     <nav>
@@ -14,15 +15,17 @@
             <a href="/">
                 <img src="/static/liquid-library-logo2.png" id="logo">            
             </a>
-            <a href="{{ url_for('favorites') }}" id="favorites"><h4>Favorites</h4></a>
             <form action="/" method="get">
                 <input type="text" placeholder="Find New Cocktail..." name="search">
                 <input type="submit" name="GO" id="top-submit">
             </form>
+            <a href="{{ url_for('favorites') }}" id="nav-sections"><h4>My Favorites</h4></a>
+            <a href="{{ url_for('logout') }}" id="nav-sections">Logout</a>
         </div>
     </nav>
 
     <h1>My Favorite Cocktails</h1>
+    <div id="cocktail-card-container">
     {% for cocktail in cocktails %}
       <div class="cocktail-card">
         <h2>{{ cocktail['strDrink'] }}</h2>
@@ -41,9 +44,18 @@
                 <li>{% if measure and measure != 'None' %}{{ measure }} {% endif %}{{ ingredient }}</li>
               {% endif %}
             {% endfor %}
-            {% endfor %}
           </ul>
         </div>
+        <form action="/delete_favorite" method="post">
+            <input type="hidden" name="cocktail_id" value="{{ cocktail['idDrink'] }}">
+            <button type="submit">Remove from Favorites</button>
+        </form>
       </div>
+    {% endfor %}
+    </div>
 </body>
+<footer>
+    <img src="/static/liquid-library-logo2.png" id="logo2">            
+    <h6>Copyright © 2023 Liquid Library</h6>
+  </footer>
 </html>

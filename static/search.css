@@ -29,3 +29,65 @@ input[type="submit"] {
     margin-top: 200px;
     height: 150px;
 }
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+}
+
+form [type="submit"] {
+    padding: 10px 20px;
+    background-color: #4b4b4b;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    width: 200px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#logo {
+    width: 250px;
+    height: 100px;
+}
+
+.nav-bar {
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: fit-content;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+  
+  .nav-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px; 
+    font-family: 'Bebas Neue';    
+    color: black;
+  }
+
+  #nav-sections h4 {
+    color: #4b4b4b;
+    font-size: large;
+  }
+
+  .nav-bar a {
+    text-decoration: none;
+  }
+
+  h2 {
+    color: black;
+  }

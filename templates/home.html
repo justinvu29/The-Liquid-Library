@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/home.css">
     <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300&family=Nunito+Sans:ital,wght@1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Fauna+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <title>Liquid Library</title>
 </head>
 <body>
@@ -15,12 +15,12 @@
             <a href="/">
                 <img src="/static/liquid-library-logo2.png" id="logo">            
             </a>
-            <a href="{{ url_for('favorites') }}" id="favorites"><h4>Favorites</h4></a>
             <form action="/" method="get">
                 <input type="text" placeholder="Find New Cocktail..." name="search">
                 <input type="submit" name="GO" id="top-submit">
             </form>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('favorites') }}" id="nav-sections"><h4>My Favorites</h4></a>
+            <a href="{{ url_for('logout') }}" id="nav-sections">Logout</a>
         </div>
     </nav>
 
@@ -57,4 +57,8 @@
         </div>
       </div>
 </body>
+<footer>
+    <img src="/static/liquid-library-logo2.png" id="logo2">            
+    <h6>Copyright © 2023 Liquid Library</h6>
+  </footer>
 </html>
