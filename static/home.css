@@ -150,3 +150,7 @@ h6{
 *{
     margin: 0%;
 }
+
+.nav-bar a {
+    text-decoration: none;
+  }
